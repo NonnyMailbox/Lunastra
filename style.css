@@ -5,7 +5,7 @@ body{
 
 .logo{
   color:white;
-  margin-right:20px;
+  margin-right:80px;
 }
 
 .sound{
@@ -30,13 +30,11 @@ body{
   display:inline-block;
   text-decoration:none;
   color:white;
-  margin-right:50px;
+  margin-right:120px;
   padding:15px 20px;
 
   border-top:4px solid transparent;
   transition:0.3s;
-
-  flex:1;
 }
 
 .menu a:hover{
