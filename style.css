@@ -3,6 +3,10 @@ body{
   margin:0;
 }
 
+.logo{
+  color:white;
+}
+
 .navbar{
   background-color:rgba(0,0,0,0.5);
   display:flex;
