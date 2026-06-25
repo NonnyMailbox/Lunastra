@@ -29,5 +29,6 @@ body{
 }
 
 .menu a:hover{
-  color:gold;
+  background-color:gold;
+  color:whte;
 }
