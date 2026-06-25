@@ -12,7 +12,7 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:20px 40px;
+  padding:0 40px;
 
   position:fixed;
   top:0;
