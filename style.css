@@ -21,3 +21,7 @@ body{
   color:white;
   margin:0 20px;
 }
+
+.menu a:hover{
+  color:gold;
+}
