@@ -17,6 +17,7 @@ h1{
 }
 
 .card button{
+  display:block;
   background-color:pink;
   color:white;
   border-radius:15px;
