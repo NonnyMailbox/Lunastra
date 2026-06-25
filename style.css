@@ -26,9 +26,13 @@ body{
   color:white;
   margin:0 20px;
   padding:15px 20px;
+
+  border-top:3px solid transparent;
+  transition:0.3s;
 }
 
 .menu a:hover{
-  background-color:gold;
+  border-top:3px solid gold;
+  background-color:rgba(255,255,255,0.1);
   color:white;
 }
