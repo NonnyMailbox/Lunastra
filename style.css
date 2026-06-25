@@ -6,7 +6,7 @@ h1{
   text-align:center;
 }
 
-card{
+.card{
   background-color:white;
   border-radius:20px;
   padding:20px;
@@ -16,4 +16,13 @@ card{
 }
 
 button{
+  background-color:pink;
+  color:white;
+  border-radius:15px;
+  padding:10px;
+}
+
+button:hover{
+  background-color:hotpink;
+}
   
