@@ -32,7 +32,7 @@ body{
   border-top:4px solid transparent;
   transition:0.3s;
 
-  margin-right:150px;
+  flex:1;
 }
 
 .menu a:hover{
