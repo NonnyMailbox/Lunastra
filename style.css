@@ -6,6 +6,10 @@ h1{
   text-align:center;
 }
 
+p{
+  text-align:center;
+}
+
 .card{
   background-color:white;
   border-radius:20px;
@@ -13,9 +17,10 @@ h1{
   width:300px;
   margin:auto;
   box-shadow:0px 5px 15px gray;
+  
 }
 
-button{
+.card button{
   background-color:pink;
   color:white;
   border-radius:15px;
