@@ -17,6 +17,7 @@ body{
 }
 
 .menu a{
+  display:inline-block;
   text-decoration:none;
   color:white;
   margin:0 20px;
