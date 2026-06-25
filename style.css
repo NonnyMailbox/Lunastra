@@ -5,12 +5,16 @@ body{
 
 .logo{
   color:white;
+  margin-right:20px;
+}
+
+.sound{
+  margin-right:20px;
 }
 
 .navbar{
   background-color:rgba(0,0,0,0.5);
   display:flex;
-  justify-content:space-between;
   align-items:center;
   padding:15px 40px;
 
@@ -26,7 +30,7 @@ body{
   display:inline-block;
   text-decoration:none;
   color:white;
-  margin:0 0px;
+  margin-right:50px;
   padding:15px 20px;
 
   border-top:4px solid transparent;
