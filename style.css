@@ -20,6 +20,10 @@ body{
   right:0;
 }
 
+.sound{
+  margin:0 20px
+}
+
 .menu a{
   display:inline-block;
   text-decoration:none;
