@@ -63,8 +63,9 @@ body{
   min-width:180px;
 
   background-color:rgba(0,0,0,0.2);
-  border-radius:10px;
+  border-radius:5px;
   overflow:hidden;
+  padding:20px 20px;
 }
 
 .dropdown:hover .dropdown-menu{
