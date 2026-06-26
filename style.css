@@ -27,7 +27,7 @@ body{
 }
 
 .menu a{
-  display:inline-block;
+  align-items:center;
   text-decoration:none;
   color:white;
   gap:0px;
