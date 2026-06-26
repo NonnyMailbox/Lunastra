@@ -29,6 +29,7 @@ body{
 .menu{
   gap:0px;
   align-items:center;
+  display:flex;
 }
 
 .menu a{
@@ -58,6 +59,8 @@ body{
   position:absolute;
   top:100%;
   left:0%;
+
+  min-width:180px;
 
   background-color:rgba(0,0,0,0.2);
   border-radius:10px;
