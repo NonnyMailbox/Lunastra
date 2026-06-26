@@ -37,12 +37,12 @@ body{
   gap:0px;
   padding:20px 20px;
 
-  border-top:4px solid transparent;
+  border-top:8px solid transparent;
   transition:0.3s;
 }
 
 .menu a:hover{
-  border-top:4px solid gold;
+  border-top:8px solid gold;
   background-color:rgba(255,255,255,0.1);
   color:white;
 }
