@@ -59,6 +59,7 @@ body{
   position:absolute;
   top:100%;
   left:0%;
+  transform:translateX(-50%);
 
   min-width:180px;
 
