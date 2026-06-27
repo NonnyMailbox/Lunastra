@@ -61,6 +61,8 @@ body{
   left:0%;
   transform:translateX(-50%);
 
+  top:calc(100%+8px)
+
   min-width:180px;
 
   background-color:rgba(0,0,0,0.2);
