@@ -18,10 +18,35 @@
         document.addEventListener('DOMContentLoaded', function() {
             const music = document.getElementById('bgm');
             const soundbutton = document.querySelector('.sound');
+            const transitionOverlay = document.querySelector('.transition-overlay');
+            const exploreButton = document.querySelector('.hero-button');
+            const targetSection = document.getElementById('galaxy-section');
 
             music.volume = 0.5; // Set the volume to 50%
 
             let playing = false;
+
+            let transitionLocked = false;
+
+            document.querySelectorAll('.navbar a[href="#"]').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                });
+            });
+
+            function playTransition() {
+                if (!transitionOverlay || transitionLocked) return;
+                transitionLocked = true;
+                transitionOverlay.classList.remove('is-hidden');
+                transitionOverlay.classList.add('is-visible');
+
+                window.setTimeout(function() {
+                    transitionOverlay.classList.remove('is-visible');
+                    transitionOverlay.classList.add('is-hidden');
+                    targetSection.classList.add('is-revealed');
+                    transitionLocked = false;
+                }, 580);
+            }
 
             soundbutton.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -38,6 +63,86 @@
                     playing = false;
                 }
             });
+
+            if (exploreButton && targetSection) {
+                exploreButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    playTransition();
+                    setTimeout(function() {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 180);
+                });
+            }
+
+            let wheelTriggered = false;
+            let wheelAccumulated = 0;
+            let wheelDirection = null;
+
+            function resetWheelGesture() {
+                wheelAccumulated = 0;
+                wheelDirection = null;
+            }
+
+            window.addEventListener('wheel', function(e) {
+                const currentScrollTop = window.scrollY;
+                const scrollingDown = e.deltaY > 0;
+                const nearHeroBottom = currentScrollTop < 220;
+                const atTop = currentScrollTop <= 10;
+                const threshold = 140;
+
+                if (transitionLocked || wheelTriggered) {
+                    e.preventDefault();
+                    return;
+                }
+
+                if (scrollingDown && nearHeroBottom) {
+                    if (wheelDirection !== 'down') {
+                        wheelDirection = 'down';
+                        wheelAccumulated = 0;
+                    }
+
+                    wheelAccumulated += Math.abs(e.deltaY);
+                    e.preventDefault();
+
+                    if (wheelAccumulated >= threshold) {
+                        wheelTriggered = true;
+                        playTransition();
+                        setTimeout(function() {
+                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 90);
+                        setTimeout(function() {
+                            wheelTriggered = false;
+                            resetWheelGesture();
+                        }, 850);
+                    }
+                    return;
+                }
+
+                if (!scrollingDown && !atTop && currentScrollTop > 120) {
+                    if (wheelDirection !== 'up') {
+                        wheelDirection = 'up';
+                        wheelAccumulated = 0;
+                    }
+
+                    wheelAccumulated += Math.abs(e.deltaY);
+                    e.preventDefault();
+
+                    if (wheelAccumulated >= threshold) {
+                        wheelTriggered = true;
+                        playTransition();
+                        setTimeout(function() {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }, 90);
+                        setTimeout(function() {
+                            wheelTriggered = false;
+                            resetWheelGesture();
+                        }, 850);
+                    }
+                    return;
+                }
+
+                resetWheelGesture();
+            }, { passive: false });
         });
     </script>
 
@@ -72,6 +177,8 @@
         </div>
     </div>
 
+    <div class="transition-overlay" aria-hidden="true"></div>
+
     <div class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -82,10 +189,19 @@
             </div>
             <h1>LUNASTRA</h1>
             <p data-i18n="welcome">Welcome to my world</p>
-            <a href="#" class="hero-button" data-i18n="explore">Explore ✦</a>
+            <a href="#galaxy-section" class="hero-button" data-i18n="explore">Explore ✦</a>
             <div class="hero-scroll">⌄</div>
         </div>
     </div>
+
+    <section id="galaxy-section" class="galaxy-section">
+        <div class="galaxy-overlay"></div>
+        <div class="galaxy-content">
+            <p class="section-kicker">A new sky</p>
+            <h2>Beyond the first light</h2>
+            <p>This section uses the galaxy image as a full-screen background to continue the experience below the hero.</p>
+        </div>
+    </section>
     
     <script src="lang/en.js"></script>
     <script src="lang/th.js"></script>
