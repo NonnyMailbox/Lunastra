@@ -1,9 +1,19 @@
 function applyLang(langObj) {
+    const langCode = langObj === th ? 'th' : 'en';
+    document.documentElement.lang = langCode;
+
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
         const key = el.getAttribute('data-i18n');
         if (!key) return;
         const val = langObj[key];
-        if (typeof val !== 'undefined') el.textContent = val;
+        if (typeof val === 'undefined') return;
+
+        if (el.getAttribute('data-i18n-html') === 'true') {
+            el.innerHTML = val;
+            return;
+        }
+
+        el.textContent = val;
     });
 }
 

@@ -19,7 +19,10 @@
             const music = document.getElementById('bgm');
             const soundbutton = document.querySelector('.sound');
             const transitionOverlay = document.querySelector('.transition-overlay');
+            const heroSection = document.querySelector('.hero');
             const exploreButton = document.querySelector('.hero-button');
+            const heroScrollButton = document.querySelector('.hero-scroll');
+            const backToTopButton = document.querySelector('.section-nav-up');
             const targetSection = document.getElementById('galaxy-section');
 
             music.volume = 0.5; // Set the volume to 50%
@@ -34,16 +37,36 @@
                 });
             });
 
-            function playTransition() {
+            function setActiveSection(sectionName) {
+                const showGalaxy = sectionName === 'galaxy';
+
+                document.body.classList.toggle('is-galaxy-active', showGalaxy);
+
+                if (heroSection) {
+                    heroSection.setAttribute('aria-hidden', showGalaxy ? 'true' : 'false');
+                }
+
+                if (targetSection) {
+                    targetSection.classList.add('is-revealed');
+                    targetSection.setAttribute('aria-hidden', showGalaxy ? 'false' : 'true');
+                }
+            }
+
+            function playTransition(callback) {
                 if (!transitionOverlay || transitionLocked) return;
                 transitionLocked = true;
                 transitionOverlay.classList.remove('is-hidden');
                 transitionOverlay.classList.add('is-visible');
 
                 window.setTimeout(function() {
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                }, 180);
+
+                window.setTimeout(function() {
                     transitionOverlay.classList.remove('is-visible');
                     transitionOverlay.classList.add('is-hidden');
-                    targetSection.classList.add('is-revealed');
                     transitionLocked = false;
                 }, 580);
             }
@@ -64,102 +87,67 @@
                 }
             });
 
-            if (exploreButton && targetSection) {
-                exploreButton.addEventListener('click', function(e) {
+            function goToGalaxy(e) {
+                if (e) {
                     e.preventDefault();
-                    playTransition();
-                    setTimeout(function() {
-                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 180);
+                }
+
+                if (!targetSection || transitionLocked || document.body.classList.contains('is-galaxy-active')) {
+                    return;
+                }
+
+                playTransition(function() {
+                    setActiveSection('galaxy');
                 });
             }
 
-            let wheelTriggered = false;
-            let wheelAccumulated = 0;
-            let wheelDirection = null;
+            function goToHero(e) {
+                if (e) {
+                    e.preventDefault();
+                }
 
-            function resetWheelGesture() {
-                wheelAccumulated = 0;
-                wheelDirection = null;
+                if (!heroSection || transitionLocked || !document.body.classList.contains('is-galaxy-active')) {
+                    return;
+                }
+
+                playTransition(function() {
+                    setActiveSection('hero');
+                });
             }
 
-            window.addEventListener('wheel', function(e) {
-                const currentScrollTop = window.scrollY;
-                const scrollingDown = e.deltaY > 0;
-                const nearHeroBottom = currentScrollTop < 220;
-                const atTop = currentScrollTop <= 10;
-                const threshold = 140;
+            if (exploreButton) {
+                exploreButton.addEventListener('click', goToGalaxy);
+            }
 
-                if (transitionLocked || wheelTriggered) {
-                    e.preventDefault();
-                    return;
-                }
+            if (heroScrollButton) {
+                heroScrollButton.addEventListener('click', goToGalaxy);
+            }
 
-                if (scrollingDown && nearHeroBottom) {
-                    if (wheelDirection !== 'down') {
-                        wheelDirection = 'down';
-                        wheelAccumulated = 0;
-                    }
+            if (backToTopButton) {
+                backToTopButton.addEventListener('click', goToHero);
+            }
 
-                    wheelAccumulated += Math.abs(e.deltaY);
-                    e.preventDefault();
-
-                    if (wheelAccumulated >= threshold) {
-                        wheelTriggered = true;
-                        playTransition();
-                        setTimeout(function() {
-                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 90);
-                        setTimeout(function() {
-                            wheelTriggered = false;
-                            resetWheelGesture();
-                        }, 850);
-                    }
-                    return;
-                }
-
-                if (!scrollingDown && !atTop && currentScrollTop > 120) {
-                    if (wheelDirection !== 'up') {
-                        wheelDirection = 'up';
-                        wheelAccumulated = 0;
-                    }
-
-                    wheelAccumulated += Math.abs(e.deltaY);
-                    e.preventDefault();
-
-                    if (wheelAccumulated >= threshold) {
-                        wheelTriggered = true;
-                        playTransition();
-                        setTimeout(function() {
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }, 90);
-                        setTimeout(function() {
-                            wheelTriggered = false;
-                            resetWheelGesture();
-                        }, 850);
-                    }
-                    return;
-                }
-
-                resetWheelGesture();
-            }, { passive: false });
+            setActiveSection('hero');
         });
     </script>
 
     <div class="navbar">
         <div class="logo">
-            <span class="logo-icon">✧</span>
+            <span class="logo-icon" aria-hidden="true">☾</span>
             <span class="logo-text">LUNASTRA</span>
         </div>
 
         <div class="menu">
-            <a href="#" data-i18n="home">Home</a>
+            <a href="#" class="is-active" data-i18n="home">Home</a>
             <a href="#" data-i18n="about">About</a>
             <a href="#" data-i18n="news">News</a>
             <div class="dropdown">
                 <a href="#" data-i18n="information">Information ⏷</a>
                 <div class="dropdown-menu">
                     <a href="#" data-i18n="project">Project</a>
+                    <a href="#" data-i18n="gallery">Gallery</a>
+                    <a href="#" data-i18n="timeline">Timeline</a>
+                    <a href="#" data-i18n="faq">FAQ</a>
                 </div>
             </div>
         </div>
@@ -181,25 +169,81 @@
 
     <div class="hero">
         <div class="hero-overlay"></div>
+        <div class="hero-ornament hero-ornament-left" aria-hidden="true"></div>
+        <div class="hero-ornament hero-ornament-right" aria-hidden="true"></div>
         <div class="hero-content">
-            <div class="hero-title-wrap">
-                <span class="hero-title-line"></span>
-                <span class="hero-title-star">✦</span>
-                <span class="hero-title-line"></span>
+            <div class="hero-title-frame" aria-hidden="true">
+                <span class="hero-frame-line"></span>
+                <span class="hero-frame-moon">☾</span>
+                <span class="hero-frame-line"></span>
             </div>
             <h1>LUNASTRA</h1>
             <p data-i18n="welcome">Welcome to my world</p>
             <a href="#galaxy-section" class="hero-button" data-i18n="explore">Explore ✦</a>
-            <div class="hero-scroll">⌄</div>
+            <button type="button" class="hero-scroll" aria-label="Go to next section">⌄</button>
         </div>
     </div>
 
-    <section id="galaxy-section" class="galaxy-section">
+    <section id="galaxy-section" class="galaxy-section" aria-hidden="true">
         <div class="galaxy-overlay"></div>
         <div class="galaxy-content">
-            <p class="section-kicker">A new sky</p>
-            <h2>Beyond the first light</h2>
-            <p>This section uses the galaxy image as a full-screen background to continue the experience below the hero.</p>
+            <div class="galaxy-panel">
+                <div class="panel-corner panel-corner-left" aria-hidden="true"></div>
+                <div class="panel-corner panel-corner-right" aria-hidden="true"></div>
+
+                <button type="button" class="section-nav section-nav-up" aria-label="Back to top">
+                    <span class="section-nav-circle" aria-hidden="true">
+                        <span class="section-nav-arrow"></span>
+                    </span>
+                </button>
+
+                <p class="connect-title" data-i18n="connectTitle">LET'S CONNECT</p>
+
+                <div class="social-links" aria-label="Social links">
+                    <a class="social-link" aria-label="Instagram" href="https://www.instagram.com/nonniio_o/" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="4.5" y="4.5" width="15" height="15" rx="4"></rect>
+                            <circle cx="12" cy="12" r="3.5"></circle>
+                            <circle cx="17.3" cy="6.8" r="1"></circle>
+                        </svg>
+                    </a>
+                    <a class="social-link" aria-label="TikTok" href="https://www.tiktok.com/@umi_kase?_r=1&_t=ZS-97w5LY6ZSr6" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M14.5 4.5c.8 2 2.2 3.1 4.3 3.4v2.9c-1.5-.1-2.8-.6-4-1.4v5.1c0 3.2-2.1 5.4-5.1 5.4-2.8 0-4.7-2-4.7-4.6 0-2.8 2.1-4.8 5.1-4.8.3 0 .6 0 .9.1v2.8a3.4 3.4 0 0 0-.8-.1c-1.4 0-2.4.9-2.4 2.1 0 1.1.9 2 2.2 2 1.4 0 2.2-1 2.2-2.8V4.5h2.3Z"></path>
+                        </svg>
+                    </a>
+                    <a class="social-link" aria-label="Email" href="https://mail.google.com/mail/?view=cm&fs=1&to=pypop2018@gmail.com" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="3.8" y="6.2" width="16.4" height="11.6" rx="2.6"></rect>
+                            <path d="M5.7 8.2 12 13.1l6.3-4.9"></path>
+                        </svg>
+                    </a>
+                    <a class="social-link" aria-label="Roblox" href="https://www.roblox.com/th/users/1111055847/profile" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="6.2" y="6.2" width="11.6" height="11.6" transform="rotate(12 12 12)"></rect>
+                            <rect class="icon-fill" x="10.35" y="10.35" width="3.3" height="3.3" transform="rotate(12 12 12)"></rect>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="galaxy-divider" aria-hidden="true">
+                    <span class="galaxy-divider-star">✦</span>
+                </div>
+
+                <div class="farewell-layout">
+                    <div class="farewell-copy">
+                        <h2 data-i18n="thanksTitle" data-i18n-html="true">Thank you<br>for visiting.</h2>
+                        <p data-i18n="thanksText">Let's create something amazing together.</p>
+                    </div>
+
+                    <div class="moon-scene" aria-hidden="true">
+                        <div class="moon-glow"></div>
+                        <div class="moon-crescent"></div>
+                    </div>
+                </div>
+
+                <p class="footer-copy" data-i18n="footerCopy">© 2025 LUNASTRA. All rights reserved.</p>
+            </div>
         </div>
     </section>
     
