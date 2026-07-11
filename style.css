@@ -583,12 +583,14 @@ body::-webkit-scrollbar {
 .farewell-layout {
     position:relative;
     z-index:1;
-    display:grid;
-    grid-template-columns:minmax(0, 1.12fr) minmax(260px, 0.88fr);
+    display:flex;
     align-items:center;
-    gap:34px;
+    justify-content:center;
+    gap:56px;
+    width:100%;
+    margin:0 auto 14px;
     margin-bottom:14px;
-    text-align:left;
+    text-align:center;
 }
 
 .farewell-copy h2 {
@@ -601,7 +603,7 @@ body::-webkit-scrollbar {
 }
 
 .farewell-copy p {
-    margin:0;
+    margin:0 auto;
     max-width:520px;
     font-size:clamp(1rem, 1.7vw, 1.45rem);
     line-height:1.7;
@@ -610,6 +612,7 @@ body::-webkit-scrollbar {
 
 .farewell-copy {
     position:relative;
+    flex:0 1 520px;
 }
 
 .farewell-copy::before {
@@ -618,15 +621,18 @@ body::-webkit-scrollbar {
 
 .moon-scene {
     position:relative;
-    min-height:240px;
+    min-height:280px;
+    flex:0 0 280px;
+    margin-right:0;
+    transform:none;
 }
 
 .moon-glow {
     position:absolute;
     top:50%;
     left:50%;
-    width:220px;
-    height:220px;
+    width:260px;
+    height:260px;
     transform:translate(-50%, -50%);
     border-radius:50%;
     background:radial-gradient(circle, rgba(255, 208, 154, 0.22) 0%, rgba(255, 208, 154, 0.08) 34%, transparent 66%);
@@ -637,8 +643,8 @@ body::-webkit-scrollbar {
     position:absolute;
     top:50%;
     left:50%;
-    width:118px;
-    height:118px;
+    width:144px;
+    height:144px;
     transform:translate(-50%, -50%);
     border-radius:50%;
     background:radial-gradient(circle at 35% 35%, #ffd7b5 0%, #ffc997 42%, #f7b977 75%, #f19a53 100%);
@@ -648,10 +654,10 @@ body::-webkit-scrollbar {
 .moon-crescent::after {
     content:"";
     position:absolute;
-    top:10px;
-    left:38px;
-    width:102px;
-    height:102px;
+    top:12px;
+    left:46px;
+    width:124px;
+    height:124px;
     border-radius:50%;
     background:rgba(22, 8, 47, 0.96);
 }
@@ -1018,9 +1024,8 @@ body.is-galaxy-active .galaxy-section {
 
 @media (max-width: 760px) {
     .farewell-layout {
-        grid-template-columns:1fr;
         gap:18px;
-        text-align:center;
+        flex-direction:column;
     }
 
     .farewell-copy p {
